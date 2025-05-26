@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NutriPlan Auth</title>
+  <link rel="stylesheet" href="/css/styles.css"/>
+  <style>
+    .password-rules {
+      margin-top: 10px;
+      font-size: 14px;
+    }
+    .password-rules ul {
+      list-style: none;
+      padding-left: 0;
+    }
+    .password-rules li.valid {
+      color: green;
+    }
+    .password-rules li.invalid {
+      color: red;
+    }
+    .password-rules.hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- LOGIN FORM -->
+    <div id="login-form" class="form-container">
+      <h2><span class="highlight">Welcome</span> Back!</h2>
+      <p>Login to get started</p>
+      <form id="loginForm" onsubmit="return false;">
+        <input type="email" name="email" placeholder="Enter your email" required>
+        <input type="password" name="password" placeholder="Enter your password" required>
+        <button type="submit">Login</button>
+      </form>
+      <p class="link-text">Don't have an account? <a href="#" onclick="toggleForm('register')">Register here</a></p>
+    </div>
+
+    <!-- REGISTER FORM -->
+    <div id="register-form" class="form-container hidden">
+      <h2>Register</h2>
+      <form id="registerForm" onsubmit="return false;">
+        <input type="text" name="firstName" placeholder="Enter your first name" required>
+        <input type="text" name="lastName" placeholder="Enter your last name" required>
+        <input type="email" name="email" placeholder="Enter your email" required>
+        <input type="password" name="password" placeholder="Enter your password" required>
+        <input type="password" name="confirmPassword" placeholder="Confirm your password" required>
+        <div id="password-rules" class="password-rules hidden">
+          <p>Password must have:</p>
+          <ul>
+            <li id="length" class="invalid">At least 8 characters</li>
+            <li id="uppercase" class="invalid">An uppercase letter</li>
+            <li id="lowercase" class="invalid">A lowercase letter</li>
+            <li id="number" class="invalid">A number</li>
+            <li id="special" class="invalid">A special character</li>
+          </ul>
+        </div>
+        <button type="submit">Register</button>
+      </form>
+      <p class="link-text">Already have an account? <a href="#" onclick="toggleForm('login')">Login here</a></p>
+    </div>
+
+    <footer>
+      <a href="#">Terms & Conditions</a>
+      <a href="#">Privacy Policy</a>
+    </footer>
+  </div>
+
+  <script>
+    "use strict";
+
+    function toggleForm(form) {
+      document.getElementById('login-form').classList.toggle('hidden', form !== 'login');
+      document.getElementById('register-form').classList.toggle('hidden', form !== 'register');
+    }
+
+    // LOGIN SUBMIT
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const body = Object.fromEntries(formData.entries());
+
+      try {
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body)
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          alert(data.message || "Login failed.");
+          return;
+        }
+
+        localStorage.setItem("nutriplanEmail", body.email);
+
+        // ✅ Check if user has filled info (age, weight, etc.)
+        const infoRes = await fetch(`/api/user/get?email=${body.email}`);
+        const userData = await infoRes.json();
+
+        if (infoRes.ok && userData.exists) {
+          window.location.href = "/dashboard";
+        } else {
+          window.location.href = "/info";
+        }
+
+      } catch (error) {
+        console.error("Login error:", error);
+        alert("An unexpected error occurred during login.");
+      }
+    });
+
+    // REGISTER SUBMIT
+    document.getElementById('registerForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const body = Object.fromEntries(formData.entries());
+
+      if (body.password !== body.confirmPassword) {
+        return alert('Passwords do not match');
+      }
+
+      try {
+        const res = await fetch('/api/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body)
+        });
+
+        const data = await res.json();
+        alert(data.message);
+
+        if (res.ok) toggleForm('login');
+      } catch (error) {
+        console.error("Registration error:", error);
+        alert("An unexpected error occurred during registration.");
+      }
+    });
+
+    // REGISTER PASSWORD VALIDATION
+    const registerPasswordInput = document.querySelector('#registerForm input[name="password"]');
+    const rules = document.querySelectorAll('#password-rules li');
+    const rulesBox = document.getElementById('password-rules');
+
+    registerPasswordInput.addEventListener('input', () => {
+      const val = registerPasswordInput.value;
+      rulesBox.classList.remove('hidden');
+      rules[0].className = val.length >= 8 ? 'valid' : 'invalid';
+      rules[1].className = /[A-Z]/.test(val) ? 'valid' : 'invalid';
+      rules[2].className = /[a-z]/.test(val) ? 'valid' : 'invalid';
+      rules[3].className = /[0-9]/.test(val) ? 'valid' : 'invalid';
+      rules[4].className = /[^A-Za-z0-9]/.test(val) ? 'valid' : 'invalid';
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,134 @@
+<!-- views/faq.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FAQ - NutriPlan</title>
+  <link rel="stylesheet" href="/css/styles.css">
+  <style>
+    .faq-section {
+      padding: 60px 40px;
+      background: #f8fdf8;
+      font-family: 'Open Sans', sans-serif;
+    }
+    .faq-title {
+      text-align: center;
+      font-size: 36px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    .faq-subtitle {
+      text-align: center;
+      margin-bottom: 50px;
+      color: #777;
+    }
+    .faq-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 40px;
+    }
+    .faq-item {
+      background: #fff;
+      padding: 25px;
+      border-left: 4px solid #a8e063;
+      box-shadow: 0 0 8px rgba(0,0,0,0.05);
+      border-radius: 8px;
+    }
+    .faq-item h4 {
+      font-size: 18px;
+      margin-bottom: 10px;
+      color: #333;
+    }
+    .faq-item p {
+      font-size: 14px;
+      color: #555;
+    }
+    .faq-item a {
+      display: inline-block;
+      margin-top: 10px;
+      font-size: 14px;
+      color: #6ba327;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    header {
+      background: #a8e063;
+      padding: 20px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: 'Open Sans', sans-serif;
+    }
+    header h1 {
+      font-size: 24px;
+      font-weight: 700;
+    }
+    nav {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+    nav a {
+      text-decoration: none;
+      color: #000;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>NutriPlan</h1>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/dashboard">Dashboard</a>
+      <a href="/faq">FAQs</a>
+      <a href="/login">Login</a>
+    </nav>
+  </header>
+
+  <section class="faq-section">
+    <h2 class="faq-title">FAQ</h2>
+    <p class="faq-subtitle">Here are some of the NutriPlan frequently asked questions</p>
+
+    <div class="faq-grid">
+      <div class="faq-item">
+        <h4>How To Add A Dietary Preference?</h4>
+        <p>Login to your account, navigate to 'Update Preferences', and choose from the available dietary tags such as vegan, keto, or allergy-specific options.</p>
+        <a href="#">READ MORE</a>
+      </div>
+
+      <div class="faq-item">
+        <h4>How Are Meal Plans Generated?</h4>
+        <p>Meal plans are generated based on your selected preferences, calorie goals, and nutritional requirements using AI-driven recommendations.</p>
+        <a href="#">READ MORE</a>
+      </div>
+
+      <div class="faq-item">
+        <h4>Can I Customize My Grocery List?</h4>
+        <p>Yes, your grocery list is editable. You can add or remove items and export the list to PDF for convenience during shopping.</p>
+        <a href="#">READ MORE</a>
+      </div>
+
+      <div class="faq-item">
+        <h4>How To Track Calories?</h4>
+        <p>Go to the Nutrition tab to see a breakdown of calories consumed based on your selected meals and track your hydration.</p>
+        <a href="#">READ MORE</a>
+      </div>
+
+      <div class="faq-item">
+        <h4>How Do I Save Recipes?</h4>
+        <p>Click on the bookmark icon on any recipe to save it to your dashboard for future access.</p>
+        <a href="#">READ MORE</a>
+      </div>
+
+      <div class="faq-item">
+        <h4>Can I Sync with Fitness Trackers?</h4>
+        <p>Integration with popular fitness apps like Fitbit and Apple Health is coming soon. Stay tuned for updates in your profile settings.</p>
+        <a href="#">READ MORE</a>
+      </div>
+    </div>
+  </section>
+</body>
+</html>

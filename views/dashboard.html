@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard - NutriPlan</title>
+  <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      font-family: 'Open Sans', sans-serif;
+      background-color: #ffffff;
+      scroll-behavior: smooth;
+    }
+    .dashboard-container {
+      display: flex;
+      height: 100vh;
+    }
+    .sidebar {
+      width: 240px;
+      background-color: #e6f4d7;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: fixed;
+      height: 100%;
+      top: 0;
+      left: 0;
+      overflow-y: auto;
+      box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+      z-index: 10;
+    }
+    .logo {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .logo-img {
+      width: 50px;
+      margin-bottom: 10px;
+    }
+    .user-info {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .user-avatar {
+      width: 60px;
+      border-radius: 50%;
+      margin-bottom: 10px;
+    }
+    .sidebar-nav {
+      width: 100%;
+    }
+    .sidebar-nav a {
+      display: block;
+      padding: 10px 15px;
+      margin-bottom: 8px;
+      text-decoration: none;
+      color: #333;
+      border-radius: 8px;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+    .sidebar-nav a.active,
+    .sidebar-nav a:hover {
+      background-color: #87c440;
+      color: #fff;
+      font-weight: bold;
+    }
+    .sidebar-nav a.logout {
+      background-color: transparent;
+      color: #333;
+      border: 1px solid #ccc;
+      text-align: center;
+      padding: 10px;
+      margin-top: 20px;
+    }
+    .sidebar-nav a.logout:hover {
+      background-color: #f8d7da;
+      color: #a94442;
+      border-color: #f5c6cb;
+    }
+    .main-content {
+      margin-left: 300px;
+      padding: 30px;
+      height: 100vh;
+      overflow-y: auto;
+      background-color: #ffffff;
+      width: calc(100% - 300px);
+    }
+    .generate-meal-plan {
+      text-align: center;
+      margin: 30px 0;
+    }
+    .generate-meal-plan h2 {
+      margin-bottom: 15px;
+      font-size: 1.8rem;
+      color: #333;
+    }
+    #generateBtn {
+      padding: 12px 24px;
+      font-weight: bold;
+      cursor: pointer;
+      background-color: #4CAF50;
+      border: none;
+      color: white;
+      border-radius: 5px;
+      font-size: 16px;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+    #generateBtn:hover {
+      background-color: #45a049;
+      transform: translateY(-2px);
+    }
+    #generateBtn:active {
+      transform: translateY(0);
+    }
+    .date-nav {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #87c440;
+      color: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+      padding: 12px 20px;
+      margin: 20px auto;
+      width: fit-content;
+      gap: 20px;
+      font-weight: bold;
+      font-size: 18px;
+    }
+    .date-nav button {
+      background: transparent;
+      border: none;
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .date-nav button:hover {
+      transform: scale(1.2);
+    }
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .section-header h3 {
+      margin: 0;
+      font-size: 1.2rem;
+    }
+    .view-all {
+      font-size: 14px;
+      color: #6ba327;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .view-all:hover {
+      color: #4a721b;
+      text-decoration: underline;
+    }
+    .recipe-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+    }
+    .recipe-card {
+      width: 340px;
+      max-width: 100%;
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 0 8px rgba(0,0,0,0.05);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .recipe-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    .recipe-card img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+    }
+    .recipe-card div {
+      padding: 15px;
+    }
+    .recipe-card h4 {
+      margin: 0 0 8px 0;
+      font-size: 16px;
+      color: #333;
+    }
+    .recipe-card p {
+      margin: 5px 0;
+    }
+    .recipe-card p span {
+      margin-right: 10px;
+      font-size: 14px;
+      color: #666;
+    }
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 200px;
+      }
+      .main-content {
+        margin-left: 200px;
+        width: calc(100% - 200px);
+        padding: 20px;
+      }
+      .recipe-card {
+        width: 100%;
+      }
+    }
+    @media (max-width: 576px) {
+      .recipe-list {
+        justify-content: center;
+      }
+      .recipe-card {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard-container">
+    <aside class="sidebar">
+      <div class="logo">
+        <img src="images/logo.png" alt="NutriPlan Logo" class="logo-img">
+        <h2>NutriPlan</h2>
+      </div>
+      <div class="user-info">
+        <p>Hello! <span id="userName">User</span></p>
+        <small id="userEmail">user@email.com</small>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="#" class="active">Dashboard</a>
+        <a href="#">Meal Plans</a>
+        <a href="#">Nutrition</a>
+        <a href="/grocerylist" class="sidebar-link">Grocery List</a>
+        <a href="#">Profile</a>
+        <a href="/info?update=true">Update Preferences</a>
+        <a href="#" class="logout" onclick="logoutUser()">Log out</a>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <section class="generate-meal-plan">
+        <h2>Your Personalised Meal Plan</h2>
+        <button id="generateBtn">Generate Meal Plan</button>
+        <div class="date-nav">
+          <button id="prevDay">&#8249;</button>
+          <span id="dateLabel">Today</span>
+          <button id="nextDay">&#8250;</button>
+        </div>
+      </section>
+
+      <div id="mealPlanContainer" class="recipe-list"></div>
+    </main>
+  </div>
+
+<script>
+  function logoutUser() {
+    localStorage.removeItem("nutriplanEmail");
+    localStorage.removeItem("planGenerated");
+    window.location.href = "/";
+  }
+
+  document.addEventListener("DOMContentLoaded", async () => {
+    const email = localStorage.getItem("nutriplanEmail");
+    if (!email) return alert("User not logged in.");
+
+    // Sidebar name/email setup
+    document.getElementById("userEmail").textContent = email;
+    const userName = email.split("@")[0];
+    document.getElementById("userName").textContent = userName.charAt(0).toUpperCase() + userName.slice(1);
+
+    let planData = null;
+    let currentIndex = 0;
+
+    const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const todayIndex = new Date().getDay();
+    const sortedDays = [...daysOfWeek.slice(todayIndex), ...daysOfWeek.slice(0, todayIndex)];
+
+    const dateLabels = [];
+    const today = new Date();
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(today);
+      d.setDate(today.getDate() + i);
+      dateLabels.push(d.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' }));
+    }
+
+    function updateMealPlanUI() {
+      if (!planData || !planData.dailyPlans) return;
+
+      document.getElementById("dateLabel").textContent = dateLabels[currentIndex];
+      const dayName = sortedDays[currentIndex];
+      const dayPlan = planData.dailyPlans.find(p => p.day === dayName);
+      const container = document.getElementById("mealPlanContainer");
+      container.innerHTML = "";
+
+      if (!dayPlan) {
+        container.innerHTML = `<p>No meals found for ${dayName}.</p>`;
+        return;
+      }
+
+      dayPlan.meals.forEach(meal => {
+        const card = `
+          <div class="recipe-card">
+            <img src="https://via.placeholder.com/300x180" alt="${meal.name}">
+            <div>
+              <h4>${meal.name}</h4>
+              <p>${meal.calories} kcal</p>
+              <p>Ingredients: ${meal.ingredients.join(", ")}</p>
+              <p>${meal.instructions.slice(0, 100)}...</p>
+            </div>
+          </div>`;
+        container.innerHTML += card;
+      });
+    }
+
+    document.getElementById("prevDay").addEventListener("click", () => {
+      currentIndex = (currentIndex - 1 + 7) % 7;
+      updateMealPlanUI();
+    });
+
+    document.getElementById("nextDay").addEventListener("click", () => {
+      currentIndex = (currentIndex + 1) % 7;
+      updateMealPlanUI();
+    });
+
+    async function generateOrRegeneratePlan(isRegenerate = false) {
+      const endpoint = isRegenerate ? "/api/meal/regenerate-plan" : "/api/meal/generate-plan";
+      const button = document.getElementById("generateBtn");
+
+      button.disabled = true;
+      button.textContent = "Loading...";
+
+      try {
+        const res = await fetch(endpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email })
+        });
+
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message);
+
+        planData = data.weeklyMealPlan;
+        currentIndex = 0;
+        button.textContent = "Regenerate Meal Plan";
+        localStorage.setItem("planGenerated", "true");
+        updateMealPlanUI();
+      } catch (err) {
+        console.error("Meal plan error:", err);
+        alert("Failed to fetch meal plan: " + err.message);
+        button.textContent = "Generate Meal Plan";
+        localStorage.removeItem("planGenerated");
+      } finally {
+        button.disabled = false;
+      }
+    }
+
+    document.getElementById("generateBtn").addEventListener("click", async () => {
+      const isRegenerate = localStorage.getItem("planGenerated") === "true";
+      await generateOrRegeneratePlan(isRegenerate);
+    });
+
+    async function loadLatestPlan() {
+      try {
+        const res = await fetch(`/api/user/get?email=${email}`);
+        const data = await res.json();
+        if (data?.exists) {
+          // Fetch latest meal plan from server (optional enhancement)
+          const planRes = await fetch(`/api/meal/plan?email=${email}`);
+          const planJson = await planRes.json();
+          if (planRes.ok && planJson.weeklyMealPlan?.dailyPlans?.length) {
+            planData = planJson.weeklyMealPlan;
+            document.getElementById("generateBtn").textContent = "Regenerate Meal Plan";
+            localStorage.setItem("planGenerated", "true");
+            updateMealPlanUI();
+          }
+        }
+      } catch (err) {
+        console.warn("No existing plan loaded.");
+        localStorage.removeItem("planGenerated");
+      }
+    }
+
+    await loadLatestPlan();
+    updateMealPlanUI();
+  });
+</script>
+</body>
+</html>

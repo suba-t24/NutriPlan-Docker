@@ -1,0 +1,279 @@
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: #f6fdf7;
+  }
+  
+  .container {
+    max-width: 400px;
+    margin: 80px auto;
+    padding: 30px;
+    text-align: center;
+    background: white;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    border-radius: 8px;
+  }
+  
+  h2 {
+    margin: 0 0 10px;
+    color: #444;
+  }
+  
+  .highlight {
+    color: #66bb45;
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin: 20px 0;
+  }
+  
+  input {
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+  }
+  
+  button {
+    padding: 12px;
+    background: linear-gradient(to right, #8fd948, #6cc04a);
+    border: none;
+    color: white;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background: #5da33f;
+  }
+  
+  .link-text {
+    font-size: 0.9em;
+  }
+  
+  .link-text a {
+    color: #66bb45;
+    text-decoration: none;
+  }
+  
+  footer {
+    margin-top: 20px;
+    font-size: 0.8em;
+  }
+  
+  footer a {
+    margin: 0 10px;
+    color: #66bb45;
+    text-decoration: none;
+  }
+  
+  .hidden {
+    display: none;
+  }
+  
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 20px;
+  }
+  
+  .logo-icon {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .logo-text {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: black;
+  }
+  
+/* Home Page CSS */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Open Sans', sans-serif;
+}
+
+body {
+  background: #f9fdf9;
+  color: #333;
+  line-height: 1.6;
+}
+
+header {
+  background: #a8e063;
+  padding: 20px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+nav a {
+  margin: 0 10px;
+  text-decoration: none;
+  color: #000;
+  font-weight: 600;
+}
+
+/* .btn-download {
+  background: white;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-weight: bold;
+  color: #000;
+  text-decoration: none;
+} */
+
+.hero {
+  text-align: center;
+  background-image: url('/images/hero.jpg');
+  background-size: cover;
+  background-position: center;
+  padding: 140px 20px;
+  color: #fff;
+}
+
+.hero-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 48px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+
+  background: linear-gradient(to right, #10e26b, #6bbe5f);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+
+
+.hero .subtitle {
+  font-size: 22px;
+  margin: 15px 0;
+  font-weight: bold;
+  color: white;
+}
+
+.hero .description {
+  margin-bottom: 30px;
+  font-size: 18px;
+}
+
+.btn-started {
+  background: #a8e063;
+  padding: 15px 30px;
+  font-size: 18px;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+.section {
+  padding: 60px 40px;
+}
+
+.section-header-hp {
+  background: linear-gradient(to right, #b5ec8d, #a8e063);
+  display: inline-block;              /* Shrink to fit text */
+  padding: 10px 30px;
+  border-radius: 30px;
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  margin: 0 auto 40px auto;           /* Center it horizontally */
+}
+
+.section-header-hp-wrapper {
+  text-align: center;
+}
+
+
+.cards {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 30px;
+}
+
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 300px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.card img {
+  width: 100%;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+.card ul {
+  text-align: left;
+  margin-top: 10px;
+  padding-left: 20px;
+}
+
+.testimonial-intro {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto 40px auto;
+  font-size: 18px;
+  color: #444;
+}
+
+.testimonial-card h4 {
+  font-size: 18px;
+  margin-bottom: 10px;
+  color: #2e7d32;
+}
+
+.btn-secondary, .btn-tertiary {
+  display: inline-block;
+  background: #e9fbe4;
+  color: #2e7d32;
+  padding: 10px 20px;
+  border-radius: 20px;
+  margin-top: 10px;
+  text-decoration: none;
+  font-weight: bold;
+  border: 2px solid #a8e063;
+}
+
+.center-button {
+  text-align: center;
+  margin-top: 30px;
+}
+
+footer {
+  background: #c5f1ac;
+  padding: 30px 20px;
+  text-align: center;
+  font-size: 14px;
+}
+
+footer a {
+  margin: 0 10px;
+  text-decoration: none;
+  color: #000;
+  font-weight: 600;
+}
+
+ 

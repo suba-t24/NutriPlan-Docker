@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NutriPlan Info Form</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+
+  <!-- 🔐 Preference Check & Redirect -->
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+  const email = localStorage.getItem("nutriplanEmail");
+  if (!email) return window.location.href = "/login";
+
+  try {
+    const res = await fetch(`/api/user/get?email=${email}`);
+    const data = await res.json();
+
+    if (res.ok && data.exists) {
+      if (!window.location.href.includes('update=true')) {
+        return window.location.href = "/dashboard";
+      } else {
+        // 🧠 Jump to Step 3 directly if updating
+        currentStep = 2;
+        showStep(currentStep);
+      }
+    }
+  } catch (err) {
+    console.error("Preference check error", err);
+  }
+});
+  </script>
+
+  <form id="infoForm" class="bg-white shadow-md rounded-lg p-8 max-w-xl w-full space-y-6">
+    <h2 class="text-2xl font-semibold text-green-600">NutriPlan - Personal Info</h2>
+
+    <!-- Hidden field for test selector or Cypress -->
+    <input type="hidden" name="email" id="hiddenEmail" />
+
+    <!-- Step 1: Basic Information -->
+    <div class="step" id="step1">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block font-medium mb-1">Age</label>
+          <input type="number" name="age" required class="w-full border rounded px-3 py-2" />
+        </div>
+        <div>
+          <label class="block font-medium mb-1">Height (cm)</label>
+          <input type="number" name="height" required class="w-full border rounded px-3 py-2" />
+        </div>
+        <div>
+          <label class="block font-medium mb-1">Weight (kg)</label>
+          <input type="number" name="weight" required class="w-full border rounded px-3 py-2" />
+        </div>
+        <div>
+          <label class="block font-medium mb-1">Gender</label>
+          <select name="gender" required class="w-full border rounded px-3 py-2">
+            <option value="">Select</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2: Dietary Preferences -->
+    <div class="step hidden" id="step2">
+      <div>
+        <label class="block font-medium mb-1">Diet Type</label>
+        <select name="dietType" required class="w-full border rounded px-3 py-2">
+          <option value="">Select</option>
+          <option value="vegetarian">Vegetarian</option>
+          <option value="vegan">Vegan</option>
+          <option value="keto">Keto</option>
+          <option value="paleo">Paleo</option>
+          <option value="balanced">Balanced</option>
+        </select>
+      </div>
+      <div class="mt-4">
+        <label class="block font-medium mb-2">Allergies</label>
+        <div class="grid grid-cols-2 gap-2">
+          <label><input type="checkbox" name="allergies" value="nuts" class="mr-2"> Nuts</label>
+          <label><input type="checkbox" name="allergies" value="dairy" class="mr-2"> Dairy</label>
+          <label><input type="checkbox" name="allergies" value="gluten" class="mr-2"> Gluten</label>
+          <label><input type="checkbox" name="allergies" value="soy" class="mr-2"> Soy</label>
+          <label><input type="checkbox" name="allergies" value="shellfish" class="mr-2"> Shellfish</label>
+        </div>
+      </div>
+      <div class="mt-4">
+        <label class="block font-medium mb-1">Meals Per Day</label>
+        <select name="mealsPerDay" required class="w-full border rounded px-3 py-2">
+          <option value="">Select</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Step 3: Goals -->
+    <div class="step hidden" id="step3">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block font-medium mb-1">Goal</label>
+          <select name="goalType" required class="w-full border rounded px-3 py-2">
+            <option value="">Select</option>
+            <option value="weight_loss">Weight Loss</option>
+            <option value="muscle_gain">Muscle Gain</option>
+            <option value="maintenance">Maintenance</option>
+          </select>
+        </div>
+        <div>
+          <label class="block font-medium mb-1">Activity Level</label>
+          <select name="activityLevel" required class="w-full border rounded px-3 py-2">
+            <option value="">Select</option>
+            <option value="low">Low</option>
+            <option value="moderate">Moderate</option>
+            <option value="high">High</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation Buttons -->
+    <div class="flex justify-between pt-4">
+      <button type="button" id="prevBtn" class="bg-gray-300 px-4 py-2 rounded" disabled>Back</button>
+      <button type="button" id="nextBtn" class="bg-green-500 text-white px-4 py-2 rounded">Next</button>
+      <button type="submit" id="submitBtn" class="bg-green-600 text-white px-4 py-2 rounded hidden">Submit</button>
+    </div>
+  </form>
+
+  <script>
+    let currentStep = 0;
+    const steps = document.querySelectorAll(".step");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const submitBtn = document.getElementById("submitBtn");
+
+    function showStep(index) {
+      steps.forEach((step, i) => {
+        step.classList.toggle("hidden", i !== index);
+      });
+      prevBtn.disabled = index === 0;
+      nextBtn.classList.toggle("hidden", index === steps.length - 1);
+      submitBtn.classList.toggle("hidden", index !== steps.length - 1);
+    }
+
+    nextBtn.addEventListener("click", () => {
+      if (currentStep < steps.length - 1) {
+        currentStep++;
+        showStep(currentStep);
+      }
+    });
+
+    prevBtn.addEventListener("click", () => {
+      if (currentStep > 0) {
+        currentStep--;
+        showStep(currentStep);
+      }
+    });
+
+    document.getElementById('infoForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const form = e.target;
+      const formData = new FormData(form);
+      const body = Object.fromEntries(formData.entries());
+
+      const allergies = [...form.querySelectorAll('input[name="allergies"]:checked')].map(cb => cb.value);
+      body.allergies = allergies;
+
+      body.age = Number(body.age);
+      body.weight = Number(body.weight);
+      body.height = Number(body.height);
+      body.mealsPerDay = Number(body.mealsPerDay);
+
+      body.goal = body.goalType.replace('_', ' ');
+      delete body.goalType;
+
+      const email = localStorage.getItem("nutriplanEmail");
+      if (!email) {
+        alert("User email not found. Please login again.");
+        return window.location.href = "/login";
+      }
+      body.email = email;
+
+      try {
+        const res = await fetch('/api/user/save', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body)
+        });
+
+        const data = await res.json();
+        alert(data.message);
+        if (res.ok) window.location.href = "/dashboard";
+      } catch (err) {
+        alert("Something went wrong while saving your info.");
+      }
+    });
+
+    showStep(currentStep);
+  </script>
+</body>
+</html>
