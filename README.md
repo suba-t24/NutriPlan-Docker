@@ -205,7 +205,7 @@ docker build -t nutriplan-docker-app .
 
 ### Run the Docker image
 ## bash:
-docker run --name nutriplan-container -p 3000:3000 nutriplan-app
+docker run --name nutriplan-container -p 3000:3000 nutriplan-docker-app
 
 ## MongoDB Notice
 This application uses MongoDB Atlas the URI has been hardcoded in the server.js file, since it is a shared cluster and can be accessed from anywhere the app should work as expected.
