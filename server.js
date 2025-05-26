@@ -14,8 +14,8 @@ const app = express(); // ✅ MUST be defined before any app.use()
 
 // Connect to MongoDB
 mongoose.connect("mongodb+srv://tsubi1024:databasepass@cluster0.0q9wgxy.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
-  .then(() => console.log('✅ MongoDB connected'))
-  .catch(err => console.error('❌ MongoDB connection error:', err));
+  .then(() => console.log('MongoDB connected'))
+  .catch(err => console.error('MongoDB connection error:', err));
 
 // Middleware
 app.use(express.json());
@@ -61,4 +61,4 @@ app.use((req, res) => {
 
 // Start server
 const PORT = 3000;
-app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
+app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
