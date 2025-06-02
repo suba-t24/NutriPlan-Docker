@@ -2,7 +2,7 @@
 const mongoose = require('mongoose');
 const Meal = require('./models/meals');
 
-mongoose.connect("mongodb://localhost:27017/nutriplan").then(async () => {
+mongoose.connect(process.env.MONGO_URI).then(async () => {
   console.log("Connected to MongoDB");
 
   const meals = [

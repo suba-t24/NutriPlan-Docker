@@ -1,0 +1,32 @@
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongo
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/nutriplan
+    volumes:
+      - .:/usr/src/app
+    command: npm start
+
+  mongo:
+    image: mongo:5
+    ports:
+      - "27018:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  seed:
+    build: .
+    depends_on:
+      - mongo
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/nutriplan
+    command: node seed.js
+    volumes:
+      - .:/usr/src/app
+
+volumes:
+  mongo-data: {}
